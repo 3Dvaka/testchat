@@ -15,25 +15,27 @@ export default function SignIn({ switchToSignUp }) {
         setCredentials({ ...credentials, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch("https://nutty-dareen-fawzi-da11a0ca.koyeb.app/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(credentials),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                login(data.token);
-                navigate("/");
-            } else {
-                setMessage(data.message || "Login failed.");
-            }
-        } catch (error) {
-            setMessage("Error connecting to server.");
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(credentials);  // Для отладки
+    try {
+        const response = await fetch("https://nutty-dareen-fawzi-da11a0ca.koyeb.app/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            login(data.token);
+            navigate("/");
+        } else {
+            setMessage(data.message || "Login failed.");
         }
-    };
+    } catch (error) {
+        setMessage("Error connecting to server.");
+    }
+};
+
 
     return (
         <div className="Login">
