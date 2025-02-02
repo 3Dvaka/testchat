@@ -7,7 +7,6 @@ import { ReactComponent as GoogleIcon } from "../../../../assets/icons/Google.sv
 export default function SignIn({ switchToSignUp }) {
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const [message, setMessage] = useState("");
-    const [errors, setErrors] = useState({ email: "", password: "" }); // добавляем состояние для ошибок
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -16,40 +15,8 @@ export default function SignIn({ switchToSignUp }) {
         setCredentials({ ...credentials, [name]: value });
     };
 
-    const validate = () => {
-        let valid = true;
-        let errors = {};
-
-        // Проверка email
-        if (!credentials.email) {
-            errors.email = "Email is required";
-            valid = false;
-        } else if (!/\S+@\S+\.\S+/.test(credentials.email)) {
-            errors.email = "Email is invalid";
-            valid = false;
-        }
-
-        // Проверка пароля
-        if (!credentials.password) {
-            errors.password = "Password is required";
-            valid = false;
-        } else if (credentials.password.length < 4) {
-            errors.password = "Password must be at least 6 characters";
-            valid = false;
-        }
-
-        setErrors(errors);
-        return valid;
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Проверка перед отправкой
-        if (!validate()) {
-            return; // если есть ошибки, не отправляем запрос
-        }
-
         try {
             const response = await fetch("https://testchatback-production.up.railway.app/api/auth/login", {
                 method: "POST",
@@ -57,10 +24,9 @@ export default function SignIn({ switchToSignUp }) {
                 body: JSON.stringify(credentials),
             });
             const data = await response.json();
-
             if (response.ok) {
                 login(data.token);
-                navigate("/"); // редирект на главную страницу
+                navigate("/");
             } else {
                 setMessage(data.message || "Login failed.");
             }
@@ -82,7 +48,6 @@ export default function SignIn({ switchToSignUp }) {
                         value={credentials.email}
                         onChange={handleChange}
                     />
-                    {errors.email && <p className="error">{errors.email}</p>} {/* отображение ошибки для email */}
                 </div>
                 <div className="Login-passwordall">
                     <p className="Login-password">Password</p>
@@ -93,7 +58,6 @@ export default function SignIn({ switchToSignUp }) {
                         value={credentials.password}
                         onChange={handleChange}
                     />
-                    {errors.password && <p className="error">{errors.password}</p>} {/* отображение ошибки для пароля */}
                 </div>
                 <p className="Login-forgotpass">Forgot Password?</p>
                 <div className="Login-buttall">
@@ -111,7 +75,7 @@ export default function SignIn({ switchToSignUp }) {
                     </span>
                 </p>
             </form>
-            <p>{message}</p> {/* отображение общего сообщения */}
+            <p>{message}</p>
         </div>
     );
 }
