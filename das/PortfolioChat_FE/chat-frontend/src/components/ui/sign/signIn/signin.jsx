@@ -33,7 +33,7 @@ export default function SignIn({ switchToSignUp }) {
         if (!credentials.password) {
             errors.password = "Password is required";
             valid = false;
-        } else if (credentials.password.length < 6) {
+        } else if (credentials.password.length < 4) {
             errors.password = "Password must be at least 6 characters";
             valid = false;
         }
