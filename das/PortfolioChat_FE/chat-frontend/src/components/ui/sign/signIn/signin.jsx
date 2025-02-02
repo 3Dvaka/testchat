@@ -17,7 +17,9 @@ export default function SignIn({ switchToSignUp }) {
 
 const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submission started with credentials:", credentials); // Log credentials
+
+    // Логируем данные перед отправкой
+    console.log("Отправка данных на сервер:", credentials);
 
     try {
         const response = await fetch("https://testchatback-production.up.railway.app/api/auth/login", {
@@ -26,22 +28,18 @@ const handleSubmit = async (e) => {
             body: JSON.stringify(credentials),
         });
 
-        console.log("Response status:", response.status); // Log the response status
+        console.log("Ответ от сервера:", response); // Логируем ответ от сервера
 
         const data = await response.json();
-        console.log("Response data:", data); // Log the response data
-
         if (response.ok) {
             login(data.token);
             navigate("/");
         } else {
             setMessage(data.message || "Login failed.");
-            console.error("Login failed:", data.message || "Login failed.");
-            console.error("Detailed error:", data.errors); // Log detailed error
         }
     } catch (error) {
-        console.error("Error during fetch:", error); // Log any errors during fetch
         setMessage("Error connecting to server.");
+        console.error("Ошибка при отправке запроса:", error);
     }
 };
 
