@@ -1,5 +1,5 @@
 
-const BASE_URL = "http://localhost:5000/api/auth";
+const BASE_URL = "https://testchatback-production.up.railway.app/api/auth";
 
 export const register = async (userData) => {
   const response = await fetch(`${BASE_URL}/register`, {
