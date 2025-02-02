@@ -25,6 +25,7 @@ const handleSubmit = async (e) => {
             body: JSON.stringify(credentials),
         });
         const data = await response.json();
+        console.log(data);  // Для отладки
         if (response.ok) {
             login(data.token);
             navigate("/");
