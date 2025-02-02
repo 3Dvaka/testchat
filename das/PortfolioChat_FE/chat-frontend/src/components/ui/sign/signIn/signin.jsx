@@ -37,12 +37,14 @@ const handleSubmit = async (e) => {
         } else {
             setMessage(data.message || "Login failed.");
             console.error("Login failed:", data.message || "Login failed.");
+            console.error("Detailed error:", data.errors); // Log detailed error
         }
     } catch (error) {
         console.error("Error during fetch:", error); // Log any errors during fetch
         setMessage("Error connecting to server.");
     }
 };
+
 
     return (
         <div className="Login">
