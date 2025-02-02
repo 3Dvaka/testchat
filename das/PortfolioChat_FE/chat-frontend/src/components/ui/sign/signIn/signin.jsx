@@ -15,25 +15,34 @@ export default function SignIn({ switchToSignUp }) {
         setCredentials({ ...credentials, [name]: value });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch("https://testchatback-production.up.railway.app/api/auth/login", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(credentials),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                login(data.token);
-                navigate("/");
-            } else {
-                setMessage(data.message || "Login failed.");
-            }
-        } catch (error) {
-            setMessage("Error connecting to server.");
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("Form submission started with credentials:", credentials); // Log credentials
+
+    try {
+        const response = await fetch("https://testchatback-production.up.railway.app/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(credentials),
+        });
+
+        console.log("Response status:", response.status); // Log the response status
+
+        const data = await response.json();
+        console.log("Response data:", data); // Log the response data
+
+        if (response.ok) {
+            login(data.token);
+            navigate("/");
+        } else {
+            setMessage(data.message || "Login failed.");
+            console.error("Login failed:", data.message || "Login failed.");
         }
-    };
+    } catch (error) {
+        console.error("Error during fetch:", error); // Log any errors during fetch
+        setMessage("Error connecting to server.");
+    }
+};
 
     return (
         <div className="Login">
