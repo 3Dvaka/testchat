@@ -15,34 +15,25 @@ export default function SignIn({ switchToSignUp }) {
         setCredentials({ ...credentials, [name]: value });
     };
 
-const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Логируем данные перед отправкой
-    console.log("Отправка данных на сервер:", credentials);
-
-    try {
-        const response = await fetch("https://testchatback-production.up.railway.app/api/auth/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(credentials),
-        });
-
-        console.log("Ответ от сервера:", response); // Логируем ответ от сервера
-
-        const data = await response.json();
-        if (response.ok) {
-            login(data.token);
-            navigate("/");
-        } else {
-            setMessage(data.message || "Login failed.");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("https://nutty-dareen-fawzi-da11a0ca.koyeb.app/api/auth/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(credentials),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                login(data.token);
+                navigate("/");
+            } else {
+                setMessage(data.message || "Login failed.");
+            }
+        } catch (error) {
+            setMessage("Error connecting to server.");
         }
-    } catch (error) {
-        setMessage("Error connecting to server.");
-        console.error("Ошибка при отправке запроса:", error);
-    }
-};
-
+    };
 
     return (
         <div className="Login">
